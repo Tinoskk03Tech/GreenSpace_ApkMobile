@@ -1,0 +1,28 @@
+name: greenspace
+description: GreenSpace - Traçabilité Agricole Togo
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  fl_chart: ^0.68.0
+  qr_flutter: ^4.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Merriweather
+      fonts:
+        - asset: fonts/Merriweather_24pt-Regular.ttf
+        - asset: fonts/Merriweather_48pt-Bold.ttf
+          weight: 700
