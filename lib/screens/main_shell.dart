@@ -1,197 +1,146 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../theme/gs_theme.dart';
 import '../models/models.dart';
-import '../theme/app_theme.dart';
+import '../widgets/widgets.dart';
 import 'dashboard_screen.dart';
-import 'agriculture_screen.dart';
-import 'verification_screen.dart';
+import 'agriculteur_screen.dart';
+import 'cooperative_screen.dart';
 import 'transformateur_screen.dart';
-import 'coop_export_screens.dart';
-import 'profile_screen.dart';
+import 'exportateur_screen.dart';
+import 'verificateur_screen.dart';
+import 'notifications_screen.dart';
+import 'compte_screen.dart';
 
 class MainShell extends StatefulWidget {
-  final UserRole role;
-  const MainShell({super.key, required this.role});
-
-  @override
-  State<MainShell> createState() => _MainShellState();
+  const MainShell({super.key});
+  @override State<MainShell> createState() => _MainShellState();
 }
 
 class _MainShellState extends State<MainShell> {
-  int _currentIndex = 0;
+  int _index = 0;
 
-  List<_NavItem> get _navItems {
-    switch (widget.role) {
-      case UserRole.agriculteur:
-        return const [
-          _NavItem(Icons.home_outlined, 'Accueil'),
-          _NavItem(Icons.grass_outlined, 'Agriculture'),
-          _NavItem(Icons.group_outlined, 'Coopérative'),
-          _NavItem(Icons.local_shipping_outlined, 'Exportateur'),
-          _NavItem(Icons.verified_outlined, 'Vérification'),
-        ];
-      case UserRole.exportateur:
-        return const [
-          _NavItem(Icons.home_outlined, 'Accueil'),
-          _NavItem(Icons.grass_outlined, 'Agriculture'),
-          _NavItem(Icons.group_outlined, 'Coopérative'),
-          _NavItem(Icons.local_shipping_outlined, 'Exportateur'),
-          _NavItem(Icons.verified_outlined, 'Vérification'),
-        ];
-      case UserRole.verificateur:
-        return const [
-          _NavItem(Icons.home_outlined, 'Accueil'),
-          _NavItem(Icons.grass_outlined, 'Agriculture'),
-          _NavItem(Icons.group_outlined, 'Coopérative'),
-          _NavItem(Icons.local_shipping_outlined, 'Exportateur'),
-          _NavItem(Icons.verified_outlined, 'Vérification'),
-        ];
-      case UserRole.transformateur:
-        return const [
-          _NavItem(Icons.home_outlined, 'Accueil'),
-          _NavItem(Icons.grass_outlined, 'Agriculture'),
-          _NavItem(Icons.group_outlined, 'Coopérative'),
-          _NavItem(Icons.local_shipping_outlined, 'Exportateur'),
-          _NavItem(Icons.verified_outlined, 'Vérification'),
-        ];
-      case UserRole.cooperative:
-        return const [
-          _NavItem(Icons.home_outlined, 'Accueil'),
-          _NavItem(Icons.grass_outlined, 'Agriculture'),
-          _NavItem(Icons.group_outlined, 'Coopérative'),
-          _NavItem(Icons.local_shipping_outlined, 'Exportateur'),
-          _NavItem(Icons.verified_outlined, 'Vérification'),
-        ];
-    }
-  }
-
-  Widget get _currentScreen {
-    switch (_currentIndex) {
-      case 0:
-        return const DashboardScreen();
-      case 1:
-        return const AgricultureScreen();
-      case 2:
-        return const CooperativeScreen();
-      case 3:
-        return const ExportateurScreen();
-      case 4:
-        return _getVerificationScreen();
-      default:
-        return const DashboardScreen();
-    }
-  }
-
-  Widget _getVerificationScreen() {
-    switch (widget.role) {
-      case UserRole.verificateur:
-        return const VerificationScreen();
-      case UserRole.transformateur:
-        return const TransformateurScreen();
-      default:
-        return const VerificationScreen();
-    }
-  }
+  // Chaque écran est accessible mais les actions sensibles sont protégées
+  static const _screens = [
+    DashboardScreen(),
+    AgriculteurScreen(),
+    CooperativeScreen(),
+    TransformateurScreen(),
+    ExportateurScreen(),
+    VerificateurScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final gs  = context.gs;
+    final app = context.watch<AppProvider>();
+
     return Scaffold(
+      backgroundColor: gs.bg,
+      appBar: GSAppBar(
+        onNotif:    () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsScreen())),
+        onProfile:  () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CompteScreen())),
+      ),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 220),
-        child: KeyedSubtree(
-          key: ValueKey(_currentIndex),
-          child: _currentScreen,
-        ),
+        switchInCurve: Curves.easeIn,
+        child: KeyedSubtree(key: ValueKey(_index), child: _screens[_index]),
       ),
       bottomNavigationBar: _BottomNav(
-        currentIndex: _currentIndex,
-        items: _navItems,
-        onTap: (i) => setState(() => _currentIndex = i),
+        current: _index,
+        onTap: (i) => setState(() => _index = i),
+        app: app,
       ),
     );
   }
 }
 
-class _NavItem {
-  final IconData icon;
-  final String label;
-  const _NavItem(this.icon, this.label);
-}
-
 class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  final List<_NavItem> items;
+  final int current;
   final Function(int) onTap;
-
-  const _BottomNav({
-    required this.currentIndex,
-    required this.items,
-    required this.onTap,
-  });
+  final AppProvider app;
+  const _BottomNav({required this.current, required this.onTap, required this.app});
 
   @override
   Widget build(BuildContext context) {
+    final gs = context.gs;
+    final role = AppState.user?.role;
+
+    final items = [
+      (Icons.home_rounded,           Icons.home_outlined,            app.t('nav_home')),
+      (Icons.grass_rounded,          Icons.grass_outlined,           app.t('nav_agri')),
+      (Icons.groups_rounded,         Icons.groups_outlined,          app.t('nav_coop')),
+      (Icons.factory_rounded,        Icons.factory_outlined,         app.t('nav_transfo')),
+      (Icons.local_shipping_rounded, Icons.local_shipping_outlined,  app.t('nav_export')),
+      (Icons.verified_rounded,       Icons.verified_outlined,        app.t('nav_verif')),
+    ];
+
+    // Quelles tabs sont "propriétaires" (action exclusive)
+    final ownerMap = {
+      1: UserRole.agriculteur,
+      2: UserRole.cooperative,
+      3: UserRole.transformateur,
+      4: UserRole.exportateur,
+      5: UserRole.verificateur,
+    };
+
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x18000000),
-            blurRadius: 16,
-            offset: Offset(0, -3),
-          ),
-        ],
+      decoration: BoxDecoration(
+        color: gs.surface,
+        boxShadow: [BoxShadow(color: gs.shadow, blurRadius: 16, offset: const Offset(0, -3))],
       ),
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 62,
+          height: 64,
           child: Row(
             children: items.asMap().entries.map((e) {
               final i = e.key;
-              final item = e.value;
-              final selected = i == currentIndex;
+              final (iconSel, icon, label) = e.value;
+              final sel = i == current;
+              // Indicateur si tab "étrangère" (pas le rôle courant, pas l'accueil)
+              final isOwner = ownerMap[i] == null || ownerMap[i] == role;
               return Expanded(
                 child: GestureDetector(
                   onTap: () => onTap(i),
                   behavior: HitTestBehavior.opaque,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          width: selected ? 40 : 0,
-                          height: selected ? 3 : 0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 3,
+                        child: sel ? Container(
+                          width: 32, height: 3,
                           decoration: BoxDecoration(
-                            color: AppColors.primaryGreen,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Icon(
-                          item.icon,
-                          size: 22,
-                          color: selected
-                              ? AppColors.primaryGreen
-                              : AppColors.textLight,
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          item.label,
-                          style: TextStyle(
-                            fontSize: 9,
-                            color: selected
-                                ? AppColors.primaryGreen
-                                : AppColors.textLight,
-                            fontWeight: selected
-                                ? FontWeight.w700
-                                : FontWeight.w400,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+                            color: gs.greenAccent,
+                            borderRadius: BorderRadius.circular(2)),
+                        ) : const SizedBox()),
+                      const SizedBox(height: 4),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Icon(sel ? iconSel : icon, size: 22,
+                            color: sel ? gs.greenAccent : gs.textLight),
+                          // Petit badge "vue seule" si pas owner
+                          if (!isOwner && i != 0)
+                            Positioned(
+                              top: -3, right: -3,
+                              child: Container(
+                                width: 7, height: 7,
+                                decoration: BoxDecoration(
+                                  color: GS.statusWait.withOpacity(0.85),
+                                  shape: BoxShape.circle),
+                              ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Text(label,
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: sel ? gs.greenAccent : gs.textLight,
+                          fontWeight: sel ? FontWeight.w700 : FontWeight.w400),
+                        overflow: TextOverflow.ellipsis),
+                    ],
                   ),
                 ),
               );

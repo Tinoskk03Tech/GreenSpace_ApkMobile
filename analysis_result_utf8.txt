@@ -1,0 +1,35 @@
+﻿Analyzing 2 items...                                            
+
+   info - Use 'const' with the constructor to improve performance - lib\screens\transformateur_screen.dart:10:41 - prefer_const_constructors
+warning - A value for optional parameter 'key' isn't ever given - lib\screens\transformateur_screen.dart:165:14 - unused_element_parameter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transformateur_screen.dart:182:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transformateur_screen.dart:194:30 - deprecated_member_use
+warning - A value for optional parameter 'key' isn't ever given - lib\screens\transformateur_screen.dart:225:11 - unused_element_parameter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transformateur_screen.dart:242:33 - deprecated_member_use
+warning - A value for optional parameter 'key' isn't ever given - lib\screens\transformateur_screen.dart:277:32 - unused_element_parameter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\transformateur_screen.dart:296:33 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\screens\verificateur_screen.dart:10:41 - prefer_const_constructors
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:115:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:155:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:194:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:209:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:211:56 - deprecated_member_use
+warning - A value for optional parameter 'key' isn't ever given - lib\screens\verificateur_screen.dart:248:27 - unused_element_parameter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:258:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:261:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:309:63 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\screens\verificateur_screen.dart:312:36 - prefer_const_constructors
+   info - The variable name '_D' isn't a lowerCamelCase identifier - lib\screens\verificateur_screen.dart:325:10 - non_constant_identifier_names
+warning - A value for optional parameter 'key' isn't ever given - lib\screens\verificateur_screen.dart:344:14 - unused_element_parameter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:361:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:392:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\verificateur_screen.dart:394:47 - deprecated_member_use
+
+flutter : 24 issues found. (ran in 6.8s)
+Au caractère Ligne:1 : 65
++ ... eenSpace" ; flutter analyze lib/screens/verificateur_screen.dart lib/ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (24 issues found. (ran in 6.8s):St 
+   ring) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

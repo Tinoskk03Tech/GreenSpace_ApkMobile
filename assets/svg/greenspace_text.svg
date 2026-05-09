@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 80" width="520" height="80">
+  <text x="0" y="64" 
+    font-family="Georgia, serif"
+    font-size="68"
+    font-weight="900"
+    font-style="italic"
+    letter-spacing="3"
+    fill="#2E7D32">GREEN</text>
+  <text x="268" y="64"
+    font-family="Georgia, serif"
+    font-size="68"
+    font-weight="300"
+    font-style="italic"
+    letter-spacing="3"
+    fill="#6D4C1F">SPACE</text>
+</svg>
